@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparador de Ordens de Produção</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .login-form label {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .login-form input {
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .header h1 {
+            color: #1a1a1a;
+            font-size: 24px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        textarea {
+            height: 300px;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: monospace;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background: white;
+            border: 2px solid #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #f9fafb;
+        }
+
+        .results {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        .alert {
+            padding: 12px;
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            color: #92400e;
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border: 1px solid #e5e7eb;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+    </style>
+</head>
+<body>
+    <div id="loginForm" class="login-container">
+        <div class="login-form">
+            <label for="password">Senha:</label>
+            <input type="password" id="password">
+            <button class="btn-primary" onclick="checkPassword()">Entrar</button>
+        </div>
+    </div>
+
+    <div id="mainContent" class="container">
+        <div class="header">
+            <h1>Comparador de Ordens de Produção</h1>
+        </div>
+        <div class="content">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label>Tabela Antes de Atualizar:</label>
+                    <textarea id="oldData" placeholder="Cole os dados da tabela antiga aqui..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Tabela Atualizada:</label>
+                    <textarea id="newData" placeholder="Cole os dados da tabela nova aqui..."></textarea>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-primary" onclick="compareData()">Comparar Dados</button>
+                <button class="btn-secondary" onclick="clearAll()">Limpar Tudo</button>
+            </div>
+
+            <div id="alert" class="alert"></div>
+            <div class="results">
+                <table id="resultsTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Centro</th>
+                            <th>Material</th>
+                            <th>Descrição</th>
+                            <th>Ordem Prod.</th>
+                            <th>N° Sequência</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const password = document.getElementById('password').value;
+            if (password === '2024') {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+            } else {
+                alert('Senha incorreta!');
+            }
+        }
+
+        // Permitir usar Enter para submeter a senha
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        function parseTable(text) {
+            const lines = text.trim().split('\n');
+            return lines.map(line => {
+                const columns = line.split('\t');
+                return {
+                    centro: columns[0],
+                    material: columns[1],
+                    descricao: columns[2],
+                    ordemProd: columns[3],
+                    sequencia: columns[4]
+                };
+            });
+        }
+
+        function compareData() {
+            try {
+                const oldTable = parseTable(document.getElementById('oldData').value);
+                const newTable = parseTable(document.getElementById('newData').value);
+                
+                // Encontrar registros divergentes
+                const divergent = newTable.filter(newRow => {
+                    return !oldTable.some(oldRow => 
+                        oldRow.ordemProd === newRow.ordemProd
+                    );
+                });
+
+                // Mostrar resultados
+                const tbody = document.getElementById('resultsBody');
+                const table = document.getElementById('resultsTable');
+                const alert = document.getElementById('alert');
+                
+                tbody.innerHTML = '';
+                
+                divergent.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${row.centro}</td>
+                        <td>${row.material}</td>
+                        <td>${row.descricao}</td>
+                        <td>${row.ordemProd}</td>
+                        <td>${row.sequencia}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                table.style.display = 'table';
+                alert.style.display = 'block';
+                alert.textContent = `Encontradas ${divergent.length} divergências de um total de ${newTable.length} registros comparados`;
+
+            } catch (error) {
+                alert('Erro ao processar os dados. Certifique-se de que o formato está correto.');
+            }
+        }
+
+        function clearAll() {
+            document.getElementById('oldData').value = '';
+            document.getElementById('newData').value = '';
+            document.getElementById('resultsTable').style.display = 'none';
+            document.getElementById('alert').style.display = 'none';
+            document.getElementById('resultsBody').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
