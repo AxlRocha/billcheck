@@ -172,8 +172,42 @@
             color: #374151;
         }
 
-        tr:hover {
+        tr.ordem-changed {
+            background-color: #fef3c7;
+        }
+
+        tr.sequencial-changed td:nth-child(7) {
+            background-color: #dcfce7;
+            font-weight: bold;
+        }
+
+        .legend {
+            margin-top: 20px;
+            padding: 12px;
             background: #f9fafb;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        .color-box {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 4px;
+        }
+
+        .ordem-color {
+            background-color: #fef3c7;
+        }
+
+        .sequencial-color {
+            background-color: #dcfce7;
         }
     </style>
 </head>
@@ -193,18 +227,18 @@
         <div class="content">
             <div class="input-grid">
                 <div class="input-group">
-                    <label>Tabela Antes de Atualizar:</label>
-                    <textarea id="oldData" placeholder="Cole os dados da tabela antiga aqui..."></textarea>
+                    <label>Tabela Original:</label>
+                    <textarea id="oldData" placeholder="Cole aqui os dados da primeira tabela..."></textarea>
                 </div>
                 <div class="input-group">
-                    <label>Tabela Atualizada:</label>
-                    <textarea id="newData" placeholder="Cole os dados da tabela nova aqui..."></textarea>
+                    <label>Tabela Nova:</label>
+                    <textarea id="newData" placeholder="Cole aqui os dados da segunda tabela..."></textarea>
                 </div>
             </div>
             
             <div class="button-group">
                 <button class="btn-primary" onclick="compareData()">Comparar Dados</button>
-                <button class="btn-secondary" onclick="clearAll()">Limpar Tudo</button>
+                <button class="btn-secondary" onclick="clearAll()">Limpar</button>
             </div>
 
             <div id="alert" class="alert"></div>
@@ -215,12 +249,27 @@
                             <th>Centro</th>
                             <th>Material</th>
                             <th>Descrição</th>
+                            <th>Remessa</th>
+                            <th>Ordem de Frete</th>
                             <th>Ordem Prod.</th>
-                            <th>N° Sequência</th>
+                            <th>N° Sequencial</th>
+                            <th>Tipo de Mudança</th>
                         </tr>
                     </thead>
                     <tbody id="resultsBody"></tbody>
                 </table>
+
+                <div class="legend">
+                    <h3>Legenda:</h3>
+                    <div class="legend-item">
+                        <div class="color-box ordem-color"></div>
+                        <span>Mudança na Ordem de Produção</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="color-box sequencial-color"></div>
+                        <span>Novo/Alteração N° Sequencial</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -236,8 +285,7 @@
             }
         }
 
-        // Permitir usar Enter para submeter a senha
-        document.getElementById('password').addEventListener('keypress', function(e) {
+        document.getElementById('password')?.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 checkPassword();
             }
@@ -248,11 +296,13 @@
             return lines.map(line => {
                 const columns = line.split('\t');
                 return {
-                    centro: columns[0],
-                    material: columns[1],
-                    descricao: columns[2],
-                    ordemProd: columns[3],
-                    sequencia: columns[4]
+                    centro: columns[0]?.trim(),
+                    material: columns[1]?.trim(),
+                    descricao: columns[2]?.trim(),
+                    remessa: columns[3]?.trim(),
+                    ordemFrete: columns[4]?.trim(),
+                    ordemProd: columns[5]?.trim(),
+                    sequencial: columns[6]?.trim() || ''
                 };
             });
         }
@@ -262,39 +312,63 @@
                 const oldTable = parseTable(document.getElementById('oldData').value);
                 const newTable = parseTable(document.getElementById('newData').value);
                 
-                // Encontrar registros divergentes
-                const divergent = newTable.filter(newRow => {
-                    return !oldTable.some(oldRow => 
-                        oldRow.ordemProd === newRow.ordemProd
+                const changes = [];
+
+                newTable.forEach(newRow => {
+                    // Procura a linha correspondente baseada no conteúdo exato da OrdemProd
+                    const oldRow = oldTable.find(old => 
+                        old.ordemProd && newRow.ordemProd && 
+                        old.ordemProd.replace(/\s+/g, '') === newRow.ordemProd.replace(/\s+/g, '')
                     );
+
+                    if (!oldRow) {
+                        // Nova ordem que não existia antes
+                        changes.push({...newRow, tipo: 'ordem'});
+                    } else {
+                        // Verifica mudanças no N° Sequencial
+                        const oldSeq = oldRow.sequencial ? oldRow.sequencial.trim() : '';
+                        const newSeq = newRow.sequencial ? newRow.sequencial.trim() : '';
+                        
+                        if (oldSeq !== newSeq && newSeq !== '') {
+                            changes.push({...newRow, tipo: 'sequencial'});
+                        }
+                    }
                 });
 
-                // Mostrar resultados
-                const tbody = document.getElementById('resultsBody');
-                const table = document.getElementById('resultsTable');
-                const alert = document.getElementById('alert');
-                
-                tbody.innerHTML = '';
-                
-                divergent.forEach(row => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${row.centro}</td>
-                        <td>${row.material}</td>
-                        <td>${row.descricao}</td>
-                        <td>${row.ordemProd}</td>
-                        <td>${row.sequencia}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-
-                table.style.display = 'table';
-                alert.style.display = 'block';
-                alert.textContent = `Encontradas ${divergent.length} divergências de um total de ${newTable.length} registros comparados`;
-
+                displayResults(changes);
             } catch (error) {
-                alert('Erro ao processar os dados. Certifique-se de que o formato está correto.');
+                console.error(error);
+                alert('Erro ao processar os dados. Verifique o formato e tente novamente.');
             }
+        }
+
+        function displayResults(changes) {
+            const tbody = document.getElementById('resultsBody');
+            const table = document.getElementById('resultsTable');
+            const alert = document.getElementById('alert');
+            
+            tbody.innerHTML = '';
+            
+            changes.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = row.tipo === 'ordem' ? 'ordem-changed' : 'sequencial-changed';
+                
+                tr.innerHTML = `
+                    <td>${row.centro}</td>
+                    <td>${row.material}</td>
+                    <td>${row.descricao}</td>
+                    <td>${row.remessa}</td>
+                    <td>${row.ordemFrete}</td>
+                    <td>${row.ordemProd}</td>
+                    <td>${row.sequencial}</td>
+                    <td>${row.tipo === 'ordem' ? 'Nova Ordem' : 'Novo N° Sequencial'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            table.style.display = changes.length > 0 ? 'table' : 'none';
+            alert.style.display = 'block';
+            alert.textContent = `Encontradas ${changes.length} mudanças no total`;
         }
 
         function clearAll() {
