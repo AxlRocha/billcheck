@@ -12,19 +12,56 @@
             font-family: Arial, sans-serif;
         }
 
+        :root {
+            /* Light theme variables */
+            --background: #f0f2f5;
+            --container-bg: white;
+            --text-color: #374151;
+            --border-color: #e5e7eb;
+            --header-bg: #f9fafb;
+            --input-border: #e5e7eb;
+            --input-focus: #2563eb;
+            --alert-bg: #fef3c7;
+            --alert-border: #fcd34d;
+            --alert-text: #92400e;
+            --button-secondary-bg: white;
+            --button-secondary-hover: #f9fafb;
+            --legend-bg: #f9fafb;
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme variables */
+            --background: #1f2937;
+            --container-bg: #2d3748;
+            --text-color: #e5e7eb;
+            --border-color: #4b5563;
+            --header-bg: #374151;
+            --input-border: #4b5563;
+            --input-focus: #60a5fa;
+            --alert-bg: #fef3c7; /* Same as light mode */
+            --alert-border: #fcd34d; /* Same as light mode */
+            --alert-text: #92400e; /* Same as light mode */
+            --button-secondary-bg: #374151;
+            --button-secondary-hover: #4b5563;
+            --legend-bg: #374151;
+        }
+
         body {
-            background: #f0f2f5;
+            background: var(--background);
             padding: 20px;
             min-height: 100vh;
+            color: var(--text-color);
+            transition: background 0.5s ease, color 0.5s ease; /* Smooth transition for theme change */
         }
 
         .login-container {
             max-width: 400px;
             margin: 100px auto;
-            background: white;
+            background: var(--container-bg);
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background 0.5s ease; /* Smooth transition for theme change */
         }
 
         .login-form {
@@ -35,38 +72,59 @@
 
         .login-form label {
             font-weight: 500;
-            color: #374151;
         }
 
         .login-form input {
             padding: 10px;
-            border: 2px solid #e5e7eb;
+            border: 2px solid var(--input-border);
             border-radius: 6px;
             font-size: 16px;
+            background: var(--container-bg);
+            color: var(--text-color);
+            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease; /* Smooth transition for theme change */
         }
 
         .login-form input:focus {
             outline: none;
-            border-color: #2563eb;
+            border-color: var(--input-focus);
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: var(--container-bg);
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: none;
+            transition: background 0.5s ease; /* Smooth transition for theme change */
         }
 
         .header {
             padding: 20px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.5s ease; /* Smooth transition for theme change */
         }
 
         .header h1 {
-            color: #1a1a1a;
             font-size: 24px;
+        }
+
+        .theme-toggle {
+            padding: 8px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--button-secondary-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease; /* Smooth transition for theme change */
+        }
+
+        .theme-toggle:hover {
+            background: var(--button-secondary-hover);
         }
 
         .content {
@@ -88,21 +146,23 @@
         .input-group label {
             margin-bottom: 8px;
             font-weight: 500;
-            color: #374151;
         }
 
         textarea {
             height: 300px;
             padding: 12px;
-            border: 2px solid #e5e7eb;
+            border: 2px solid var(--input-border);
             border-radius: 6px;
             font-family: monospace;
             resize: vertical;
+            background: var(--container-bg);
+            color: var(--text-color);
+            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease; /* Smooth transition for theme change */
         }
 
         textarea:focus {
             outline: none;
-            border-color: #2563eb;
+            border-color: var(--input-focus);
         }
 
         .button-group {
@@ -122,6 +182,7 @@
         .btn-primary {
             background: #2563eb;
             color: white;
+            transition: background 0.5s ease; /* Smooth transition for hover effect */
         }
 
         .btn-primary:hover {
@@ -129,13 +190,14 @@
         }
 
         .btn-secondary {
-            background: white;
-            border: 2px solid #e5e7eb;
-            color: #374151;
+            background: var(--button-secondary-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease; /* Smooth transition for theme change */
         }
 
         .btn-secondary:hover {
-            background: #f9fafb;
+            background: var(--button-secondary-hover);
         }
 
         .results {
@@ -145,48 +207,69 @@
 
         .alert {
             padding: 12px;
-            background: #fef3c7;
-            border: 1px solid #fcd34d;
+            background: var(--alert-bg);
+            border: 1px solid var(--alert-border);
             border-radius: 6px;
             margin-bottom: 16px;
-            color: #92400e;
+            color: var(--alert-text);
             display: none;
+            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease; /* Smooth transition for theme change */
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            border: 1px solid #e5e7eb;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            transition: background 0.5s ease, border-color 0.5s ease; /* Smooth transition for theme change */
         }
 
         th, td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid var(--border-color);
+            transition: border-bottom 0.5s ease, color 0.5s ease; /* Smooth transition for theme change */
         }
 
         th {
-            background: #f9fafb;
+            background: var(--header-bg);
             font-weight: 600;
-            color: #374151;
+            transition: background 0.5s ease; /* Smooth transition for theme change */
         }
 
         tr.ordem-changed {
-            background-color: #fef3c7;
+            background-color: #fef3c7; /* Orange for order changes */
+        }
+
+        tr.ordem-changed td {
+            color: #1a1a1a; /* Darker text for readability on orange background */
+        }
+
+        tr.ordem-changed td:last-child {
+            color: #000000; /* Keep "Nova Ordem" as black */
         }
 
         tr.sequencial-changed td:nth-child(7) {
-            background-color: #dcfce7;
+            background-color: #dcfce7; /* Green for sequential changes */
             font-weight: bold;
+            color: #1a1a1a; /* Darker text for readability on green background */
+        }
+
+        tr.sequencial-changed td {
+            color: var(--text-color); /* Default text color for other columns */
+        }
+
+        tr.sequencial-changed td:last-child {
+            color: #ffffff; /* White text for "Novo N° Sequencial" */
         }
 
         .legend {
             margin-top: 20px;
             padding: 12px;
-            background: #f9fafb;
+            background: var(--legend-bg);
             border-radius: 6px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--border-color);
+            transition: background 0.5s ease, border-color 0.5s ease; /* Smooth transition for theme change */
         }
 
         .legend-item {
@@ -211,7 +294,7 @@
         }
     </style>
 </head>
-<body>
+<body data-theme="light">
     <div id="loginForm" class="login-container">
         <div class="login-form">
             <label for="password">Senha:</label>
@@ -223,6 +306,7 @@
     <div id="mainContent" class="container">
         <div class="header">
             <h1>Comparador de Ordens de Produção</h1>
+            <button class="theme-toggle" onclick="toggleTheme()">Mudar Tema</button>
         </div>
         <div class="content">
             <div class="input-grid">
@@ -315,17 +399,14 @@
                 const changes = [];
 
                 newTable.forEach(newRow => {
-                    // Procura a linha correspondente baseada no conteúdo exato da OrdemProd
                     const oldRow = oldTable.find(old => 
                         old.ordemProd && newRow.ordemProd && 
                         old.ordemProd.replace(/\s+/g, '') === newRow.ordemProd.replace(/\s+/g, '')
                     );
 
                     if (!oldRow) {
-                        // Nova ordem que não existia antes
                         changes.push({...newRow, tipo: 'ordem'});
                     } else {
-                        // Verifica mudanças no N° Sequencial
                         const oldSeq = oldRow.sequencial ? oldRow.sequencial.trim() : '';
                         const newSeq = newRow.sequencial ? newRow.sequencial.trim() : '';
                         
@@ -378,6 +459,20 @@
             document.getElementById('alert').style.display = 'none';
             document.getElementById('resultsBody').innerHTML = '';
         }
+
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Apply saved theme on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
     </script>
 </body>
 </html>
