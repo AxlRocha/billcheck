@@ -38,9 +38,9 @@
             --header-bg: #374151;
             --input-border: #4b5563;
             --input-focus: #60a5fa;
-            --alert-bg: #fef3c7; /* Same as light mode */
-            --alert-border: #fcd34d; /* Same as light mode */
-            --alert-text: #92400e; /* Same as light mode */
+            --alert-bg: #fef3c7;
+            --alert-border: #fcd34d;
+            --alert-text: #92400e;
             --button-secondary-bg: #374151;
             --button-secondary-hover: #4b5563;
             --legend-bg: #374151;
@@ -51,7 +51,7 @@
             padding: 20px;
             min-height: 100vh;
             color: var(--text-color);
-            transition: background 0.5s ease, color 0.5s ease; /* Smooth transition for theme change */
+            transition: background 0.5s ease, color 0.5s ease;
         }
 
         .login-container {
@@ -61,7 +61,7 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: background 0.5s ease; /* Smooth transition for theme change */
+            transition: background 0.5s ease;
         }
 
         .login-form {
@@ -81,7 +81,7 @@
             font-size: 16px;
             background: var(--container-bg);
             color: var(--text-color);
-            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease; /* Smooth transition for theme change */
+            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease;
         }
 
         .login-form input:focus {
@@ -96,7 +96,7 @@
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: none;
-            transition: background 0.5s ease; /* Smooth transition for theme change */
+            transition: background 0.5s ease;
         }
 
         .header {
@@ -105,7 +105,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: border-color 0.5s ease; /* Smooth transition for theme change */
+            transition: border-color 0.5s ease;
         }
 
         .header h1 {
@@ -120,7 +120,7 @@
             color: var(--text-color);
             cursor: pointer;
             font-weight: 500;
-            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease; /* Smooth transition for theme change */
+            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease;
         }
 
         .theme-toggle:hover {
@@ -157,7 +157,7 @@
             resize: vertical;
             background: var(--container-bg);
             color: var(--text-color);
-            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease; /* Smooth transition for theme change */
+            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease;
         }
 
         textarea:focus {
@@ -182,7 +182,7 @@
         .btn-primary {
             background: #2563eb;
             color: white;
-            transition: background 0.5s ease; /* Smooth transition for hover effect */
+            transition: background 0.5s ease;
         }
 
         .btn-primary:hover {
@@ -193,7 +193,7 @@
             background: var(--button-secondary-bg);
             border: 2px solid var(--border-color);
             color: var(--text-color);
-            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease; /* Smooth transition for theme change */
+            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease;
         }
 
         .btn-secondary:hover {
@@ -213,7 +213,7 @@
             margin-bottom: 16px;
             color: var(--alert-text);
             display: none;
-            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease; /* Smooth transition for theme change */
+            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease;
         }
 
         table {
@@ -221,46 +221,46 @@
             border-collapse: collapse;
             background: var(--container-bg);
             border: 1px solid var(--border-color);
-            transition: background 0.5s ease, border-color 0.5s ease; /* Smooth transition for theme change */
+            transition: background 0.5s ease, border-color 0.5s ease;
         }
 
         th, td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
-            transition: border-bottom 0.5s ease, color 0.5s ease; /* Smooth transition for theme change */
+            transition: border-bottom 0.5s ease, color 0.5s ease;
         }
 
         th {
             background: var(--header-bg);
             font-weight: 600;
-            transition: background 0.5s ease; /* Smooth transition for theme change */
+            transition: background 0.5s ease;
         }
 
         tr.ordem-changed {
-            background-color: #fef3c7; /* Orange for order changes */
+            background-color: #fef3c7;
         }
 
         tr.ordem-changed td {
-            color: #1a1a1a; /* Darker text for readability on orange background */
+            color: #1a1a1a;
         }
 
         tr.ordem-changed td:last-child {
-            color: #000000; /* Keep "Nova Ordem" as black */
+            color: #000000;
         }
 
         tr.sequencial-changed td:nth-child(7) {
-            background-color: #dcfce7; /* Green for sequential changes */
+            background-color: #dcfce7;
             font-weight: bold;
-            color: #1a1a1a; /* Darker text for readability on green background */
+            color: #1a1a1a;
         }
 
         tr.sequencial-changed td {
-            color: var(--text-color); /* Default text color for other columns */
+            color: var(--text-color);
         }
 
         tr.sequencial-changed td:last-child {
-            color: #ffffff; /* White text for "Novo N° Sequencial" */
+            color: #ffffff;
         }
 
         .legend {
@@ -269,7 +269,7 @@
             background: var(--legend-bg);
             border-radius: 6px;
             border: 1px solid var(--border-color);
-            transition: background 0.5s ease, border-color 0.5s ease; /* Smooth transition for theme change */
+            transition: background 0.5s ease, border-color 0.5s ease;
         }
 
         .legend-item {
@@ -375,20 +375,64 @@
             }
         });
 
+        // Função para preencher campos em branco com valores anteriores
+        function fillEmptyFields(data) {
+            let currentCentro = '';
+            let currentMaterial = '';
+            let currentDescricao = '';
+            
+            return data.map(row => {
+                // Preenche Centro
+                if (row.centro && row.centro.trim() !== '') {
+                    currentCentro = row.centro.trim();
+                } else {
+                    row.centro = currentCentro;
+                }
+                
+                // Preenche Material
+                if (row.material && row.material.trim() !== '') {
+                    currentMaterial = row.material.trim();
+                } else {
+                    row.material = currentMaterial;
+                }
+                
+                // Preenche Descrição
+                if (row.descricao && row.descricao.trim() !== '') {
+                    currentDescricao = row.descricao.trim();
+                } else {
+                    row.descricao = currentDescricao;
+                }
+                
+                return row;
+            });
+        }
+
         function parseTable(text) {
             const lines = text.trim().split('\n');
-            return lines.map(line => {
+            let data = lines.map(line => {
                 const columns = line.split('\t');
                 return {
-                    centro: columns[0]?.trim(),
-                    material: columns[1]?.trim(),
-                    descricao: columns[2]?.trim(),
-                    remessa: columns[3]?.trim(),
-                    ordemFrete: columns[4]?.trim(),
-                    ordemProd: columns[5]?.trim(),
-                    sequencial: columns[6]?.trim() || ''
+                    centro: columns[0] || '',
+                    material: columns[1] || '',
+                    descricao: columns[2] || '',
+                    remessa: columns[3] || '',
+                    ordemFrete: columns[4] || '',
+                    ordemProd: columns[5] || '',
+                    sequencial: columns[6] || ''
                 };
             });
+            
+            // Preenche campos em branco
+            data = fillEmptyFields(data);
+            
+            // Remove linhas com dados essenciais vazios
+            data = data.filter(row => 
+                row.centro && row.centro.trim() !== '' &&
+                row.material && row.material.trim() !== '' &&
+                row.ordemProd && row.ordemProd.trim() !== ''
+            );
+            
+            return data;
         }
 
         function compareData() {
@@ -396,30 +440,48 @@
                 const oldTable = parseTable(document.getElementById('oldData').value);
                 const newTable = parseTable(document.getElementById('newData').value);
                 
+                console.log('Tabela Original processada:', oldTable.length, 'registros');
+                console.log('Tabela Nova processada:', newTable.length, 'registros');
+                
                 const changes = [];
 
+                // Processa cada linha da nova tabela
                 newTable.forEach(newRow => {
+                    // Procura por ordem de produção correspondente na tabela original
                     const oldRow = oldTable.find(old => 
                         old.ordemProd && newRow.ordemProd && 
                         old.ordemProd.replace(/\s+/g, '') === newRow.ordemProd.replace(/\s+/g, '')
                     );
 
                     if (!oldRow) {
-                        changes.push({...newRow, tipo: 'ordem'});
+                        // Nova ordem não encontrada na tabela original
+                        changes.push({
+                            ...newRow,
+                            tipo: 'ordem',
+                            tipoDescricao: 'Nova Ordem'
+                        });
                     } else {
+                        // Compara sequencial
                         const oldSeq = oldRow.sequencial ? oldRow.sequencial.trim() : '';
                         const newSeq = newRow.sequencial ? newRow.sequencial.trim() : '';
                         
                         if (oldSeq !== newSeq && newSeq !== '') {
-                            changes.push({...newRow, tipo: 'sequencial'});
+                            changes.push({
+                                ...newRow,
+                                tipo: 'sequencial',
+                                tipoDescricao: 'Novo N° Sequencial',
+                                sequencialAnterior: oldSeq
+                            });
                         }
                     }
                 });
 
+                console.log('Mudanças encontradas:', changes.length);
                 displayResults(changes);
+                
             } catch (error) {
-                console.error(error);
-                alert('Erro ao processar os dados. Verifique o formato e tente novamente.');
+                console.error('Erro no processamento:', error);
+                alert('Erro ao processar os dados. Verifique o formato e tente novamente.\n\nDetalhes: ' + error.message);
             }
         }
 
@@ -430,26 +492,37 @@
             
             tbody.innerHTML = '';
             
+            if (changes.length === 0) {
+                alert.style.display = 'block';
+                alert.textContent = 'Nenhuma mudança encontrada entre as tabelas.';
+                table.style.display = 'none';
+                return;
+            }
+            
             changes.forEach(row => {
                 const tr = document.createElement('tr');
                 tr.className = row.tipo === 'ordem' ? 'ordem-changed' : 'sequencial-changed';
                 
                 tr.innerHTML = `
-                    <td>${row.centro}</td>
-                    <td>${row.material}</td>
-                    <td>${row.descricao}</td>
-                    <td>${row.remessa}</td>
-                    <td>${row.ordemFrete}</td>
-                    <td>${row.ordemProd}</td>
-                    <td>${row.sequencial}</td>
-                    <td>${row.tipo === 'ordem' ? 'Nova Ordem' : 'Novo N° Sequencial'}</td>
+                    <td>${row.centro || ''}</td>
+                    <td>${row.material || ''}</td>
+                    <td>${row.descricao || ''}</td>
+                    <td>${row.remessa || ''}</td>
+                    <td>${row.ordemFrete || ''}</td>
+                    <td>${row.ordemProd || ''}</td>
+                    <td>${row.sequencial || ''}</td>
+                    <td>${row.tipoDescricao}</td>
                 `;
                 tbody.appendChild(tr);
             });
 
-            table.style.display = changes.length > 0 ? 'table' : 'none';
+            table.style.display = 'table';
             alert.style.display = 'block';
-            alert.textContent = `Encontradas ${changes.length} mudanças no total`;
+            
+            const novasOrdens = changes.filter(c => c.tipo === 'ordem').length;
+            const sequenciaisAlterados = changes.filter(c => c.tipo === 'sequencial').length;
+            
+            alert.textContent = `Encontradas ${changes.length} mudanças no total (${novasOrdens} novas ordens, ${sequenciaisAlterados} alterações de sequencial)`;
         }
 
         function clearAll() {
