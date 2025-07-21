@@ -447,8 +447,22 @@
 
         function compareData() {
             try {
-                const oldTable = parseTable(document.getElementById('oldData').value);
-                const newTable = parseTable(document.getElementById('newData').value);
+                const oldDataValue = document.getElementById('oldData').value.trim();
+                const newDataValue = document.getElementById('newData').value.trim();
+                
+                // Verifica se a tabela nova está vazia
+                if (!newDataValue) {
+                    const alert = document.getElementById('alert');
+                    const table = document.getElementById('resultsTable');
+                    
+                    alert.style.display = 'block';
+                    alert.textContent = 'Não há dados na tabela nova para comparar. Cole os dados na tabela da direita primeiro.';
+                    table.style.display = 'none';
+                    return;
+                }
+                
+                const oldTable = parseTable(oldDataValue);
+                const newTable = parseTable(newDataValue);
                 
                 console.log('Tabela Original processada:', oldTable.length, 'registros');
                 console.log('Tabela Nova processada:', newTable.length, 'registros');
@@ -536,8 +550,28 @@
         }
 
         function markAsChecked() {
+            // Verifica se há dados na tabela nova antes de mover
+            const newDataContent = document.getElementById('newData').value.trim();
+            
+            if (!newDataContent) {
+                const alert = document.getElementById('alert');
+                alert.style.display = 'block';
+                alert.textContent = 'Não há dados na tabela nova para marcar como conferido.';
+                alert.style.background = '#fef2f2';
+                alert.style.borderColor = '#fca5a5';
+                alert.style.color = '#dc2626';
+                
+                // Remove a mensagem após 3 segundos
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                    alert.style.background = 'var(--alert-bg)';
+                    alert.style.borderColor = 'var(--alert-border)';
+                    alert.style.color = 'var(--alert-text)';
+                }, 3000);
+                return;
+            }
+            
             // Copia o conteúdo da tabela nova (direita) para a tabela original (esquerda)
-            const newDataContent = document.getElementById('newData').value;
             document.getElementById('oldData').value = newDataContent;
             
             // Limpa a tabela nova (direita)
@@ -551,7 +585,7 @@
             // Mostra uma confirmação
             const alert = document.getElementById('alert');
             alert.style.display = 'block';
-            alert.textContent = 'Dados conferidos!';
+            alert.textContent = 'Dados conferidos! Tabela nova foi movida para tabela original.';
             alert.style.background = '#dcfce7';
             alert.style.borderColor = '#22c55e';
             alert.style.color = '#166534';
