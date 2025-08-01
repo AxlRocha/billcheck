@@ -445,6 +445,37 @@
             return data;
         }
 
+        // Função para converter dados de volta para formato de tabela
+        function dataToTableFormat(data) {
+            return data.map(row => 
+                [row.centro, row.material, row.descricao, row.remessa, row.ordemFrete, row.ordemProd, row.sequencial].join('\t')
+            ).join('\n');
+        }
+
+        // Função para mesclar dados (mantém dados da esquerda e adiciona novos da direita)
+        function mergeData(oldTable, newTable) {
+            const mergedData = [...oldTable]; // Começa com todos os dados da tabela original
+            
+            // Para cada item da nova tabela
+            newTable.forEach(newRow => {
+                // Procura se já existe na tabela original
+                const existingIndex = mergedData.findIndex(oldRow => 
+                    oldRow.ordemProd && newRow.ordemProd && 
+                    oldRow.ordemProd.replace(/\s+/g, '') === newRow.ordemProd.replace(/\s+/g, '')
+                );
+                
+                if (existingIndex === -1) {
+                    // Se não existe, adiciona no final
+                    mergedData.push(newRow);
+                } else {
+                    // Se existe, atualiza os dados (principalmente o sequencial)
+                    mergedData[existingIndex] = {...mergedData[existingIndex], ...newRow};
+                }
+            });
+            
+            return mergedData;
+        }
+
         function compareData() {
             try {
                 const oldDataValue = document.getElementById('oldData').value.trim();
@@ -467,10 +498,18 @@
                 console.log('Tabela Original processada:', oldTable.length, 'registros');
                 console.log('Tabela Nova processada:', newTable.length, 'registros');
                 
+                // Mescla os dados mantendo todos os da esquerda e adicionando novos da direita
+                const mergedData = mergeData(oldTable, newTable);
+                
+                // Atualiza a tabela da direita com os dados mesclados
+                document.getElementById('newData').value = dataToTableFormat(mergedData);
+                
+                console.log('Dados mesclados:', mergedData.length, 'registros');
+                
                 const changes = [];
 
-                // Processa cada linha da nova tabela
-                newTable.forEach(newRow => {
+                // Processa cada linha da nova tabela mesclada
+                mergedData.forEach(newRow => {
                     // Procura por ordem de produção correspondente na tabela original
                     const oldRow = oldTable.find(old => 
                         old.ordemProd && newRow.ordemProd && 
@@ -501,7 +540,7 @@
                 });
 
                 console.log('Mudanças encontradas:', changes.length);
-                displayResults(changes);
+                displayResults(changes, mergedData.length - oldTable.length);
                 
             } catch (error) {
                 console.error('Erro no processamento:', error);
@@ -509,14 +548,14 @@
             }
         }
 
-        function displayResults(changes) {
+        function displayResults(changes, addedRecords) {
             const tbody = document.getElementById('resultsBody');
             const table = document.getElementById('resultsTable');
             const alert = document.getElementById('alert');
             
             tbody.innerHTML = '';
             
-            if (changes.length === 0) {
+            if (changes.length === 0 && addedRecords === 0) {
                 alert.style.display = 'block';
                 alert.textContent = 'Nenhuma mudança encontrada entre as tabelas.';
                 table.style.display = 'none';
@@ -546,7 +585,13 @@
             const novasOrdens = changes.filter(c => c.tipo === 'ordem').length;
             const sequenciaisAlterados = changes.filter(c => c.tipo === 'sequencial').length;
             
-            alert.textContent = `Encontradas ${changes.length} mudanças no total (${novasOrdens} novas ordens, ${sequenciaisAlterados} alterações de sequencial)`;
+            let alertMessage = `Encontradas ${changes.length} mudanças no total (${novasOrdens} novas ordens, ${sequenciaisAlterados} alterações de sequencial)`;
+            
+            if (addedRecords > 0) {
+                alertMessage += `. ${addedRecords} registros foram adicionados da tabela original para manter todos os dados.`;
+            }
+            
+            alert.textContent = alertMessage;
         }
 
         function markAsChecked() {
