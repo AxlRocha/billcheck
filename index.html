@@ -498,18 +498,10 @@
                 console.log('Tabela Original processada:', oldTable.length, 'registros');
                 console.log('Tabela Nova processada:', newTable.length, 'registros');
                 
-                // Mescla os dados mantendo todos os da esquerda e adicionando novos da direita
-                const mergedData = mergeData(oldTable, newTable);
-                
-                // Atualiza a tabela da direita com os dados mesclados
-                document.getElementById('newData').value = dataToTableFormat(mergedData);
-                
-                console.log('Dados mesclados:', mergedData.length, 'registros');
-                
                 const changes = [];
 
-                // Processa cada linha da nova tabela mesclada
-                mergedData.forEach(newRow => {
+                // Processa cada linha da nova tabela
+                newTable.forEach(newRow => {
                     // Procura por ordem de produção correspondente na tabela original
                     const oldRow = oldTable.find(old => 
                         old.ordemProd && newRow.ordemProd && 
@@ -540,7 +532,7 @@
                 });
 
                 console.log('Mudanças encontradas:', changes.length);
-                displayResults(changes, mergedData.length - oldTable.length);
+                displayResults(changes);
                 
             } catch (error) {
                 console.error('Erro no processamento:', error);
@@ -548,14 +540,14 @@
             }
         }
 
-        function displayResults(changes, addedRecords) {
+        function displayResults(changes) {
             const tbody = document.getElementById('resultsBody');
             const table = document.getElementById('resultsTable');
             const alert = document.getElementById('alert');
             
             tbody.innerHTML = '';
             
-            if (changes.length === 0 && addedRecords === 0) {
+            if (changes.length === 0) {
                 alert.style.display = 'block';
                 alert.textContent = 'Nenhuma mudança encontrada entre as tabelas.';
                 table.style.display = 'none';
@@ -585,20 +577,15 @@
             const novasOrdens = changes.filter(c => c.tipo === 'ordem').length;
             const sequenciaisAlterados = changes.filter(c => c.tipo === 'sequencial').length;
             
-            let alertMessage = `Encontradas ${changes.length} mudanças no total (${novasOrdens} novas ordens, ${sequenciaisAlterados} alterações de sequencial)`;
-            
-            if (addedRecords > 0) {
-                alertMessage += `. ${addedRecords} registros foram adicionados da tabela original para manter todos os dados.`;
-            }
-            
-            alert.textContent = alertMessage;
+            alert.textContent = `Encontradas ${changes.length} mudanças no total (${novasOrdens} novas ordens, ${sequenciaisAlterados} alterações de sequencial)`;
         }
 
         function markAsChecked() {
             // Verifica se há dados na tabela nova antes de mover
-            const newDataContent = document.getElementById('newData').value.trim();
+            const oldDataValue = document.getElementById('oldData').value.trim();
+            const newDataValue = document.getElementById('newData').value.trim();
             
-            if (!newDataContent) {
+            if (!newDataValue) {
                 const alert = document.getElementById('alert');
                 alert.style.display = 'block';
                 alert.textContent = 'Não há dados na tabela nova para marcar como conferido.';
@@ -616,8 +603,24 @@
                 return;
             }
             
-            // Copia o conteúdo da tabela nova (direita) para a tabela original (esquerda)
-            document.getElementById('oldData').value = newDataContent;
+            // Faz a mesclagem inteligente dos dados
+            let finalData = newDataValue;
+            let addedRecords = 0;
+            
+            if (oldDataValue) {
+                const oldTable = parseTable(oldDataValue);
+                const newTable = parseTable(newDataValue);
+                
+                // Mescla os dados mantendo todos os da esquerda e adicionando novos da direita
+                const mergedData = mergeData(oldTable, newTable);
+                addedRecords = mergedData.length - newTable.length;
+                
+                // Converte de volta para formato de tabela
+                finalData = dataToTableFormat(mergedData);
+            }
+            
+            // Move o conteúdo mesclado para a tabela original (esquerda)
+            document.getElementById('oldData').value = finalData;
             
             // Limpa a tabela nova (direita)
             document.getElementById('newData').value = '';
@@ -630,18 +633,24 @@
             // Mostra uma confirmação
             const alert = document.getElementById('alert');
             alert.style.display = 'block';
-            alert.textContent = 'Dados conferidos! Tabela nova foi movida para tabela original.';
+            
+            let confirmationMessage = 'Dados conferidos! Tabela nova foi movida para tabela original.';
+            if (addedRecords > 0) {
+                confirmationMessage += ` ${addedRecords} registros da tabela original foram preservados.`;
+            }
+            
+            alert.textContent = confirmationMessage;
             alert.style.background = '#dcfce7';
             alert.style.borderColor = '#22c55e';
             alert.style.color = '#166534';
             
-            // Remove a mensagem de confirmação após 3 segundos
+            // Remove a mensagem de confirmação após 4 segundos
             setTimeout(() => {
                 alert.style.display = 'none';
                 alert.style.background = 'var(--alert-bg)';
                 alert.style.borderColor = 'var(--alert-border)';
                 alert.style.color = 'var(--alert-text)';
-            }, 3000);
+            }, 4000);
         }
 
         function toggleTheme() {
